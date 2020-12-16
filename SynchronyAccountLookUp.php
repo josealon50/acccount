@@ -15,7 +15,8 @@
     include_once("./libs/src/Synchrony/SynchronyHeader.php");
     include_once( './libs/AcctLookUp/EnhancedAcctReqParm.php');
     include_once( './libs/AcctLookUp/enhancedAcctLkpRequest.php');
-    require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
+    require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
+    //require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
 
     global $appconfig;
     
@@ -32,7 +33,7 @@
         $endDate->setDate( $argv[2], IDate::ORACLE_FORMAT );
 
         //Doing a search by date on SO.PU_DEL_DT
-        $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.STORE_CD = '" . $argv[3] . "' ";
+        $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.SO_STORE_CD = '" . $argv[3] . "' ";
         
     }
     else{
