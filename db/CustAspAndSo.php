@@ -6,7 +6,7 @@ class CustAspAndSo extends IDBTable {
         parent::__construct($db);
         $this->tablename        = 'CUST_ASP INNER JOIN SO ON SO.CUST_CD = CUST_ASP.CUST_CD';
         $this->dbcolumns        = array(
-                                      'CUST_ASP.CUST_CD'=>'CUST_ASP.CUST_CD'
+                                      "CUST_CD'=>'CUST_CD'
                                     , 'AS_CD'=>'AS_CD'
                                     , 'ACCT_CD'=>'ACCT_CD'
                                     , 'EXPIR_DT'=>'EXPIR_DT'
@@ -35,6 +35,7 @@ class CustAspAndSo extends IDBTable {
                                         , 'PASS_EXP_DT'
                                         );
 
+        $this->dbcolumns_function = array( "CUST_CD" => "CUST_ASP.CUST_CD CUST_CD" );
 
         $this->errorMsg 			= "";
 
