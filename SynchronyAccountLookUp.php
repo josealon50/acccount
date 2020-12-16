@@ -7,7 +7,7 @@
     include_once( './db/Cust.php');
     include_once( './db/MorCustAspAppHist.php');
     include_once( './db/MorStoreToAspMerchant.php');
-    include_once( './db/ZipLocationDist.php');
+    include_once( './db/ZipCodes.php');
     include_once( './db/CustAspAndSo.php');
     include_once("./libs/src/Synchrony/SynchronySoap.php");
     include_once("./libs/src/Synchrony/SynchronyBody.php");
@@ -107,14 +107,67 @@
                     }
                }
             }
-        }
 
-        $fp = fopen( "./out/customers_no_acct.csv", 'w+' );
-        fwrite( $fp, "CUST_CD,FIRST_NAME,LAST_NAME,PHONE_NUMBER\n");
-        //Create a new csv file for customer that we were not able to find their account numbers 
-        foreach( $customersNoAcct as $value ){
-            fputcsv( $fp, $value );
         }
+        else{
+            //We need to find the closest store with respect to their zip code
+            $zip = new ZipCodes($db);
+            $where = "WHERE ZIP_CD = '" . $cust->get_ZIP_CD() . "' ";
+
+            $result = $zip->query($where);
+            if( $result < 0 ){
+                //echo "ERROR QUERY ZIP_LOCATION_DIST WHERE: $where\n";
+            }
+
+            if( $zip->next() ){
+                $merchant = new MorStoreToAspMerchant($db);
+                $where = "WHERE STORE_CD = '" . $zip->get_STORE_CD() . "' AND AS_CD = 'SYF'"; 
+                $result = $merchant->query($where);
+                
+                if ( $merchant->next() ){
+                    $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE(), $cust->get_ZIP_CD() );
+                    var_dump($acct->AccountNumber);
+                    sleep($appconfig['CALL_DELAY']); 
+                    if( !isset($acct->AccountNumber) ){
+                        //Might need to do a search on bus phone 
+                        if( !is_null($cust->get_BUS_PHONE()) ){
+                            $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_BUS_PHONE(), $cust->get_ZIP_CD() );
+                            var_dump($acct->AccountNumber);
+                            sleep($appconfig['CALL_DELAY']); 
+                            if( !isset($acct->AccountNumber) ){
+                                //Capture customer we could not find his account number 
+                                array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
+                            }
+                            else{
+                                //Call endpoint to create new CUST_ASP record
+                                callCustAsp( $row['CUST_CD'], "SYF" );
+                            }
+                        }
+                        else{
+                            array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
+                        }
+                    }
+                    else{
+                        //Call endpoint to create new CUST_ASP record
+                        callCustAsp( $row['CUST_CD'], "SYF" );
+                    }
+                }
+                else{
+                    array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
+                }
+            }
+            else{
+                //Capture customer code customer have incorrect data and no way to 
+                //find out his account number
+                array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
+            }
+        }
+    }
+    $fp = fopen( "./out/customers_no_acct.csv", 'w+' );
+    fwrite( $fp, "CUST_CD,FIRST_NAME,LAST_NAME,PHONE_NUMBER\n");
+    //Create a new csv file for customer that we were not able to find their account numbers 
+    foreach( $customersNoAcct as $value ){
+        fputcsv( $fp, $value );
     }
 
     function getAccountNumber( $merchantNum, $fname, $lname, $phone, $zipCode ) {
