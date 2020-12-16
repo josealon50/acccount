@@ -24,28 +24,28 @@
     $customersNoAcct = []; 
     $row = null;
 
-    if ( $argc == 3 ){
-        $custAsp = new CustAspAndSo( $db );
+    if ( $argc == 4 ){
+        $customers = new CustAspAndSo( $db );
         $fromDate = new IDate();
         $fromDate->setDate( $argv[1], IDate::ORACLE_FORMAT );
         $endDate = new IDate();
         $endDate->setDate( $argv[2], IDate::ORACLE_FORMAT );
 
         //Doing a search by date on SO.PU_DEL_DT
-        $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF'";
+        $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.STORE_CD = '" . $argv[3] . "' ";
         
     }
     else{
-        $custAsp = new CustAsp( $db );
+        $customers = new CustAsp( $db );
         $where = "WHERE AS_CD = 'SYF' AND ACCT_NUM IS NULL"; 
 
     }
 
-    $error = $custAsp->query($where);
+    $error = $customers->query($where);
     if ( $error < 0 ){
         //echo "Error on Query to CUST_ASP: " . $where . "\n";
     }
-    while( $row = $custAsp->next() ){
+    while( $row = $customers->next() ){
         echo "PROCESSING CUSTOMER: " . $row['CUST_CD'] . "\n";
         //Query Cust table to get phone number
         $cust = new Cust($db);
@@ -67,7 +67,6 @@
             $result = $custAspHist->query($where);
 
             if ( $result < 0 ){
-                //echo "ERROR QUERY MOR_CUST_ASP_HISTORY\n";
                 continue;
             }
             if ( $custAspHist->next() ){
@@ -87,6 +86,7 @@
                         if( !is_null($cust->get_BUS_PHONE()) ){
                             $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_BUS_PHONE(), $cust->get_ZIP_CD() );
                             sleep($appconfig['CALL_DELAY']); 
+
                             if( !isset($acct->AccountNumber) ){
                                 //Capture customer we could not find his account number 
                                 array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
@@ -105,59 +105,6 @@
                         callCustAsp( $row['CUST_CD'], "SYF", $acct );
                     }
                }
-            }
-            else{
-                //We need to find the closest store with respect to their zip code
-                $zip = new ZipLocationDist($db);
-                $where = "WHERE ZIP_CD = '" . $cust->get_ZIP_CD() . "' ";
-
-                $result = $zip->query($where);
-                if( $result < 0 ){
-                    //echo "ERROR QUERY ZIP_LOCATION_DIST WHERE: $where\n";
-                }
-
-                if( $zip->next() ){
-                    $merchant = new MorStoreToAspMerchant($db);
-                    $where = "WHERE STORE_CD = '" . $zip->get_S_STORE_CD() . "' AND AS_CD = 'SYF'"; 
-                    $result = $merchant->query($where);
-                    
-                    if ( $merchant->next() ){
-                        $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE(), $cust->get_ZIP_CD() );
-                        var_dump($acct->AccountNumber);
-                        sleep($appconfig['CALL_DELAY']); 
-                        if( !isset($acct->AccountNumber) ){
-                            //Might need to do a search on bus phone 
-                            if( !is_null($cust->get_BUS_PHONE()) ){
-                                $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_BUS_PHONE(), $cust->get_ZIP_CD() );
-                                var_dump($acct->AccountNumber);
-                                sleep($appconfig['CALL_DELAY']); 
-                                if( !isset($acct->AccountNumber) ){
-                                    //Capture customer we could not find his account number 
-                                    array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
-                                }
-                                else{
-                                    //Call endpoint to create new CUST_ASP record
-                                    callCustAsp( $row['CUST_CD'], "SYF" );
-                                }
-                            }
-                            else{
-                                array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
-                            }
-                        }
-                        else{
-                            //Call endpoint to create new CUST_ASP record
-                            callCustAsp( $row['CUST_CD'], "SYF" );
-                        }
-                    }
-                    else{
-                        array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
-                    }
-                }
-                else{
-                    //Capture customer code customer have incorrect data and no way to 
-                    //find out his account number
-                    array_push( $customersNoAcct, [ $row['CUST_CD'], $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE()] );
-                }
             }
         }
 
