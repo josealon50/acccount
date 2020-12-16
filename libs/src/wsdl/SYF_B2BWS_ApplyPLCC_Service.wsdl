@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch0="http://schemas.syf.com/services/V2" xmlns:sch1="http://schemas.syf.com/service/apply/java" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://schemas.syf.com/services/V2" xmlns:s0="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:s1="http://docs.oasis-open.org/wss/2004/01/oasis-200401wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" targetNamespace="http://schemas.syf.com/services/V2">
+	<s0:Policy s1:Id="Policy.xml">
+		<sp:SupportingTokens xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+			<wsp:Policy>
+				<sp:UsernameToken>
+					<wsp:Policy>
+						<sp:UsernameToken/>
+					</wsp:Policy>
+				</sp:UsernameToken>
+			</wsp:Policy>
+		</sp:SupportingTokens>
+	</s0:Policy>
+	<wsp:UsingPolicy wsdl:Required="true"/>
+	<wsdl:types>
+		<xsd:schema xmlns:java="http://schemas.syf.com/service/apply/java" xmlns:v2="http://schemas.syf.com/services/V2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://schemas.syf.com/services/V2">
+			<xsd:import namespace="http://schemas.syf.com/service/apply/java"/>
+			<xsd:element name="applyPlccRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="v2:creditAppPlccReqParm"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="applyPlccResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="v2:creditOutcomeResultPlcc"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditAppPlccReqParm">
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element minOccurs="0" ref="java:AccountSecurity"/>
+						<xsd:element ref="java:Address1"/>
+						<xsd:element minOccurs="0" ref="java:Address2"/>
+						<xsd:element ref="java:City"/>
+						<xsd:element minOccurs="0" ref="java:Client"/>
+						<xsd:element minOccurs="0" ref="java:CoFrequency"/>
+						<xsd:element minOccurs="0" ref="java:CoHomePhone"/>
+						<xsd:element minOccurs="0" ref="java:CoMobilePhone"/>
+						<xsd:element minOccurs="0" ref="java:CoSuffix"/>
+						<xsd:element minOccurs="0" ref="java:Coaddress1"/>
+						<xsd:element minOccurs="0" ref="java:Coaddress2"/>
+						<xsd:element minOccurs="0" ref="java:Cocity"/>
+						<xsd:element minOccurs="0" ref="java:Codob"/>
+						<xsd:element minOccurs="0" ref="java:CodriversLicenseExpirationDate"/>
+						<xsd:element minOccurs="0" ref="java:CodriversLicenseState"/>
+						<xsd:element minOccurs="0" ref="java:CoeMail"/>
+						<xsd:element minOccurs="0" ref="java:CofirstName"/>
+						<xsd:element minOccurs="0" ref="java:Coincome"/>
+						<xsd:element minOccurs="0" ref="java:ColastName"/>
+						<xsd:element minOccurs="0" ref="java:ComiddleInitial"/>
+						<xsd:element minOccurs="0" ref="java:CoresidenceType"/>
+						<xsd:element minOccurs="0" ref="java:Cossn"/>
+						<xsd:element minOccurs="0" ref="java:Costate"/>
+						<xsd:element minOccurs="0" ref="java:CozipCode"/>
+						<xsd:element minOccurs="0" ref="java:CoEmployerPhone"/>
+						<xsd:element ref="java:Dob"/>
+						<xsd:element minOccurs="0" ref="java:DriversLicenseExpirationDate"/>
+						<xsd:element minOccurs="0" ref="java:DriversLicenseState"/>
+						<xsd:element minOccurs="0" ref="java:EMail"/>
+						<xsd:element minOccurs="0" ref="java:EmployeeNumber"/>
+						<xsd:element minOccurs="0" ref="java:EmployerPhone"/>
+						<xsd:element ref="java:FirstName"/>
+						<xsd:element ref="java:Frequency"/>
+						<xsd:element minOccurs="0" ref="java:HomePhone"/>
+						<xsd:element ref="java:Income"/>
+						<xsd:element ref="java:LastName"/>
+						<xsd:element ref="java:MerchantNumber"/>
+						<xsd:element minOccurs="0" ref="java:MiddleInitial"/>
+						<xsd:element minOccurs="0" ref="java:MobilePhone"/>
+						<xsd:element ref="java:OperationCode"/>
+						<xsd:element ref="java:OrginationCode"/>
+						<xsd:element minOccurs="0" ref="java:PartnerCode"/>
+						<xsd:element ref="java:ProductCode"/>
+						<xsd:element ref="java:PurchaseAmount"/>
+						<xsd:element minOccurs="0" ref="java:RegisterNumber"/>
+						<xsd:element ref="java:ResidenceType"/>
+						<xsd:element ref="java:Ssn"/>
+						<xsd:element ref="java:State"/>
+						<xsd:element minOccurs="0" ref="java:Suffix"/>
+						<xsd:element ref="java:ZipCode"/>
+						<xsd:element minOccurs="0" ref="java:ChannelId"/>
+					</xsd:all>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditOutcomeResultPlcc">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="java:AccountNumber"/>
+						<xsd:element ref="java:Apr"/>
+						<xsd:element ref="java:CofirstName"/>
+						<xsd:element ref="java:ColastName"/>
+						<xsd:element ref="java:CreditLimit"/>
+						<xsd:element ref="java:FirstName"/>
+						<xsd:element ref="java:KeyNumber"/>
+						<xsd:element ref="java:LastName"/>
+						<xsd:element ref="java:RiskTier"/>
+						<xsd:element ref="java:SecondaryProgramName"/>
+						<xsd:element ref="java:Status"/>
+						<xsd:element ref="java:ResponseText"/>
+						<xsd:element ref="java:ResponseCode"/>
+						<xsd:element ref="java:ListOfErrors"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="findAppStatusRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="v2:creditAppStatusReqParm"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="findAppStatusResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="v2:creditOutcomeResultStatus"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditAppStatusReqParm">
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element minOccurs="0" ref="java:Client"/>
+						<xsd:element ref="java:KeyNumber"/>
+						<xsd:element ref="java:MerchantNumber"/>
+						<xsd:element ref="java:OperationCode"/>
+						<xsd:element ref="java:OrginationCode"/>
+						<xsd:element minOccurs="0" ref="java:PartnerCode"/>
+						<xsd:element minOccurs="0" ref="java:ChannelId"/>
+					</xsd:all>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditOutcomeResultStatus">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="java:AccountNumber"/>
+						<xsd:element ref="java:Apr"/>
+						<xsd:element ref="java:CofirstName"/>
+						<xsd:element ref="java:ColastName"/>
+						<xsd:element ref="java:CreditLimit"/>
+						<xsd:element ref="java:FirstName"/>
+						<xsd:element ref="java:LastName"/>
+						<xsd:element ref="java:RiskTier"/>
+						<xsd:element ref="java:SecondaryProgramName"/>
+						<xsd:element ref="java:Status"/>
+						<xsd:element ref="java:ResponseText"/>
+						<xsd:element ref="java:ResponseCode"/>
+						<xsd:element ref="java:ListOfErrors"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditLineIncreaseRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="v2:creditLineServiceReqParm"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditLineIncreaseResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="v2:creditLineServiceResParm"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditLineServiceReqParm">
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element ref="java:AccountNumber"/>
+						<xsd:element ref="java:CbCheck"/>
+						<xsd:element minOccurs="0" ref="java:Client"/>
+						<xsd:element ref="java:Frequency"/>
+						<xsd:element ref="java:Income"/>
+						<xsd:element ref="java:MerchantNumber"/>
+						<xsd:element ref="java:PurchaseAmount"/>
+						<xsd:element ref="java:ResidenceType"/>
+						<xsd:element minOccurs="0" ref="java:ChannelId"/>
+					</xsd:all>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="creditLineServiceResParm">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="java:KeyNumber"/>
+						<xsd:element ref="java:OpenToBuy"/>
+						<xsd:element ref="java:ResponseText"/>
+						<xsd:element ref="java:Status"/>
+						<xsd:element ref="java:ResponseCode"/>
+						<xsd:element ref="java:ListOfErrors"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+		<xsd:schema xmlns:ns="http://schemas.syf.com/service/apply/java" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://schemas.syf.com/service/apply/java">
+			<xsd:element name="AccountSecurity" type="xsd:string"/>
+			<xsd:element name="Address1" type="xsd:string"/>
+			<xsd:element name="Address2" type="xsd:string"/>
+			<xsd:element name="City" type="xsd:string"/>
+			<xsd:element name="Client" type="xsd:string"/>
+			<xsd:element name="CoEmployerPhone" type="xsd:string"/>
+			<xsd:element name="CoFrequency" type="xsd:string"/>
+			<xsd:element name="CoHomePhone" type="xsd:string"/>
+			<xsd:element name="CoMobilePhone" type="xsd:string"/>
+			<xsd:element name="CoSuffix" type="xsd:string"/>
+			<xsd:element name="Coaddress1" type="xsd:string"/>
+			<xsd:element name="Coaddress2" type="xsd:string"/>
+			<xsd:element name="Cocity" type="xsd:string"/>
+			<xsd:element name="Codob" type="xsd:string"/>
+			<xsd:element name="CodriversLicenseExpirationDate" type="xsd:string"/>
+			<xsd:element name="CodriversLicenseState" type="xsd:string"/>
+			<xsd:element name="CoeMail" type="xsd:string"/>
+			<xsd:element name="CofirstName" type="xsd:string"/>
+			<xsd:element name="ColastName" type="xsd:string"/>
+			<xsd:element name="Coincome" type="xsd:string"/>
+			<xsd:element name="ComiddleInitial" type="xsd:string"/>
+			<xsd:element name="CoresidenceType" type="xsd:string"/>
+			<xsd:element name="Cossn" type="xsd:string"/>
+			<xsd:element name="Costate" type="xsd:string"/>
+			<xsd:element name="CozipCode" type="xsd:string"/>
+			<xsd:element name="Dob" type="xsd:string"/>
+			<xsd:element name="DriversLicenseExpirationDate" type="xsd:string"/>
+			<xsd:element name="DriversLicenseState" type="xsd:string"/>
+			<xsd:element name="EMail" type="xsd:string"/>
+			<xsd:element name="EmployeeNumber" type="xsd:string"/>
+			<xsd:element name="EmployerPhone" type="xsd:string"/>
+			<xsd:element name="FirstName" type="xsd:string"/>
+			<xsd:element name="Frequency" type="xsd:string"/>
+			<xsd:element name="HomePhone" type="xsd:string"/>
+			<xsd:element name="Income" type="xsd:string"/>
+			<xsd:element name="LastName" type="xsd:string"/>
+			<xsd:element name="MerchantNumber" type="xsd:string"/>
+			<xsd:element name="MiddleInitial" type="xsd:string"/>
+			<xsd:element name="MobilePhone" type="xsd:string"/>
+			<xsd:element name="OperationCode" type="xsd:string"/>
+			<xsd:element name="OrginationCode" type="xsd:string"/>
+			<xsd:element name="PartnerCode" type="xsd:string"/>
+			<xsd:element name="ProductCode" type="xsd:string"/>
+			<xsd:element name="PurchaseAmount" type="xsd:string"/>
+			<xsd:element name="RegisterNumber" type="xsd:string"/>
+			<xsd:element name="ResidenceType" type="xsd:string"/>
+			<xsd:element name="Ssn" type="xsd:string"/>
+			<xsd:element name="State" type="xsd:string"/>
+			<xsd:element name="Suffix" type="xsd:string"/>
+			<xsd:element name="ZipCode" type="xsd:string"/>
+			<xsd:element name="KeyNumber" type="xsd:string"/>
+			<xsd:element name="AccountNumber" type="xsd:string"/>
+			<xsd:element name="CbCheck" type="xsd:string"/>
+			<xsd:element name="Apr" type="xsd:string"/>
+			<xsd:element name="CreditLimit" type="xsd:string"/>
+			<xsd:element name="RiskTier" type="xsd:string"/>
+			<xsd:element name="SecondaryProgramName" type="xsd:string"/>
+			<xsd:element name="Status" type="xsd:string"/>
+			<xsd:element name="ResponseText" type="xsd:string"/>
+			<xsd:element name="ResponseCode" type="xsd:string"/>
+			<xsd:element name="Error" type="xsd:string"/>
+			<xsd:element name="ListOfErrors">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" ref="ns:Error"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OpenToBuy" type="xsd:string"/>
+			<xsd:element name="ChannelId" type="xsd:string"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="applyPlccResponse">
+		<wsdl:part element="tns:applyPlccResponse" name="applyPlccResponse"/>
+	</wsdl:message>
+	<wsdl:message name="applyPlccRequest">
+		<wsdl:part element="tns:applyPlccRequest" name="applyPlccRequest"/>
+	</wsdl:message>
+	<wsdl:message name="creditLineIncreaseRequest">
+		<wsdl:part element="tns:creditLineIncreaseRequest" name="creditLineIncreaseRequest"/>
+	</wsdl:message>
+	<wsdl:message name="creditLineIncreaseResponse">
+		<wsdl:part element="tns:creditLineIncreaseResponse" name="creditLineIncreaseResponse"/>
+	</wsdl:message>
+	<wsdl:message name="findAppStatusRequest">
+		<wsdl:part element="tns:findAppStatusRequest" name="findAppStatusRequest"/>
+	</wsdl:message>
+	<wsdl:message name="findAppStatusResponse">
+		<wsdl:part element="tns:findAppStatusResponse" name="findAppStatusResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="ApplyPlcc">
+		<wsdl:operation name="applyPlcc">
+			<wsdl:input message="tns:applyPlccRequest" name="applyPlccRequest"/>
+			<wsdl:output message="tns:applyPlccResponse" name="applyPlccResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="creditLineIncrease">
+			<wsdl:input message="tns:creditLineIncreaseRequest" name="creditLineIncreaseRequest"/>
+			<wsdl:output message="tns:creditLineIncreaseResponse" name="creditLineIncreaseResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="findAppStatus">
+			<wsdl:input message="tns:findAppStatusRequest" name="findAppStatusRequest"/>
+			<wsdl:output message="tns:findAppStatusResponse" name="findAppStatusResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ApplyPlccSoap11" type="tns:ApplyPlcc">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="applyPlcc">
+			<soap:operation soapAction=""/>
+			<wsdl:input name="applyPlccRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="applyPlccResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="creditLineIncrease">
+			<soap:operation soapAction=""/>
+			<wsdl:input name="creditLineIncreaseRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="creditLineIncreaseResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findAppStatus">
+			<soap:operation soapAction=""/>
+			<wsdl:input name="findAppStatusRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="findAppStatusResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ApplyPlccService">
+		<wsdl:port binding="tns:ApplyPlccSoap11" name="ApplyPlccSoap11">
+			<soap:address location="https://iwww.b2bcreditservices.com/ApplyPlccService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

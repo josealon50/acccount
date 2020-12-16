@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch0="http://schemas.syf.com/services/V2" xmlns:sch1="http://schemas.syf.com/service/account/java" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://schemas.syf.com/services/V2" targetNamespace="http://schemas.syf.com/services/V2">
+	<wsdl:types>
+		<xsd:schema xmlns:java="http://schemas.syf.com/service/account/java" xmlns:v2="http://schemas.syf.com/services/V2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://schemas.syf.com/services/V2">
+			<xsd:import namespace="http://schemas.syf.com/service/account/java"/>
+			<xsd:element name="findOpenToBuyRequest" type="v2:findOpenToBuyRequest"/>
+			<xsd:element name="AccountToBuyParm" type="v2:AccountToBuyParm"/>
+			<xsd:element name="findOpenToBuyResponse" type="v2:findOpenToBuyResponse"/>
+			<xsd:element name="AccountToBuyResParm" type="v2:AccountToBuyResParm"/>
+			<xsd:element name="enhancedAcctLkpRequest" type="v2:enhancedAcctLkpRequest"/>
+			<xsd:element name="EnhancedAcctReqParm" type="v2:EnhancedAcctReqParm"/>
+			<xsd:element name="enhancedAcctLkpResponse" type="v2:enhancedAcctLkpResponse"/>
+			<xsd:element name="EnhancedAcctResParm" type="v2:EnhancedAcctResParm"/>
+			<xsd:complexType name="findOpenToBuyRequest">
+				<xsd:sequence>
+					<xsd:element ref="v2:AccountToBuyParm"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AccountToBuyParm">
+				<xsd:all>
+					<xsd:element ref="java:AccountNumber"/>
+					<xsd:element minOccurs="0" ref="java:Client"/>
+					<xsd:element ref="java:MerchantNumber"/>
+					<xsd:element minOccurs="0" ref="java:PartnerCode"/>
+					<xsd:element minOccurs="0" ref="java:ChannelId"/>
+					<xsd:element minOccurs="0" ref="java:AccountType"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="findOpenToBuyResponse">
+				<xsd:sequence>
+					<xsd:element ref="v2:AccountToBuyResParm"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AccountToBuyResParm">
+				<xsd:all>
+					<xsd:element ref="java:AccountNumber"/>
+					<xsd:element ref="java:Address1"/>
+					<xsd:element ref="java:Address2"/>
+					<xsd:element ref="java:FirstName"/>
+					<xsd:element ref="java:LastName"/>
+					<xsd:element ref="java:City"/>
+					<xsd:element ref="java:CreditLimit"/>
+					<xsd:element ref="java:CurrentBalance"/>
+					<xsd:element ref="java:ExpirationMonth"/>
+					<xsd:element ref="java:ExpirationYear"/>
+					<xsd:element ref="java:OpenToBuy"/>
+					<xsd:element ref="java:State"/>
+					<xsd:element ref="java:ZipCode"/>
+					<xsd:element ref="java:ResponseText"/>
+					<xsd:element ref="java:ResponseCode"/>
+					<xsd:element ref="java:Token"/>
+					<xsd:element ref="java:ListOfErrors"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="enhancedAcctLkpRequest">
+				<xsd:sequence>
+					<xsd:element ref="v2:EnhancedAcctReqParm"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="EnhancedAcctReqParm">
+				<xsd:all>
+					<xsd:element minOccurs="0" ref="java:Client"/>
+					<xsd:element ref="java:MerchantNumber"/>
+					<xsd:element minOccurs="0" ref="java:PartnerCode"/>
+					<xsd:element ref="java:Ssn"/>
+					<xsd:element ref="java:ZipCode"/>
+					<xsd:element minOccurs="0" ref="java:ChannelId"/>
+					<xsd:element minOccurs="0" ref="java:ProductCode"/>
+					<xsd:element minOccurs="0" ref="java:CHDPrefix1"/>
+					<xsd:element minOccurs="0" ref="java:CHDPrefix2"/>
+					<xsd:element minOccurs="0" ref="java:CHDPrefix3"/>
+					<xsd:element minOccurs="0" ref="java:CHDPrefix4"/>
+					<xsd:element minOccurs="0" ref="java:FirstName"/>
+					<xsd:element minOccurs="0" ref="java:LastName"/>
+					<xsd:element minOccurs="0" ref="java:AccountType"/>
+					<xsd:element minOccurs="0" ref="java:PhoneNumber"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="enhancedAcctLkpResponse">
+				<xsd:sequence>
+					<xsd:element ref="v2:EnhancedAcctResParm"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="EnhancedAcctResParm">
+				<xsd:all>
+					<xsd:element ref="java:AccountNumber"/>
+					<xsd:element ref="java:Address1"/>
+					<xsd:element ref="java:Address2"/>
+					<xsd:element ref="java:FirstName"/>
+					<xsd:element ref="java:LastName"/>
+					<xsd:element ref="java:City"/>
+					<xsd:element ref="java:CreditLimit"/>
+					<xsd:element ref="java:CurrentBalance"/>
+					<xsd:element ref="java:ExpirationMonth"/>
+					<xsd:element ref="java:ExpirationYear"/>
+					<xsd:element ref="java:OpenToBuy"/>
+					<xsd:element ref="java:State"/>
+					<xsd:element ref="java:ZipCode"/>
+					<xsd:element ref="java:ResponseText"/>
+					<xsd:element ref="java:ResponseCode"/>
+					<xsd:element ref="java:Token"/>
+					<xsd:element ref="java:ListOfErrors"/>
+				</xsd:all>
+			</xsd:complexType>
+		</xsd:schema>
+		<xsd:schema xmlns:ns="http://schemas.syf.com/service/account/java" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.syf.com/service/account/java">
+			<xsd:element name="Client" type="xsd:string"/>
+			<xsd:element name="MerchantNumber" type="xsd:string"/>
+			<xsd:element name="PartnerCode" type="xsd:string"/>
+			<xsd:element name="Ssn" type="xsd:string"/>
+			<xsd:element name="ZipCode" type="xsd:string"/>
+			<xsd:element name="AccountNumber" type="xsd:string"/>
+			<xsd:element name="Address1" type="xsd:string"/>
+			<xsd:element name="Address2" type="xsd:string"/>
+			<xsd:element name="FirstName" type="xsd:string"/>
+			<xsd:element name="LastName" type="xsd:string"/>
+			<xsd:element name="City" type="xsd:string"/>
+			<xsd:element name="CreditLimit" type="xsd:string"/>
+			<xsd:element name="CurrentBalance" type="xsd:string"/>
+			<xsd:element name="ExpirationMonth" type="xsd:string"/>
+			<xsd:element name="ExpirationYear" type="xsd:string"/>
+			<xsd:element name="OpenToBuy" type="xsd:string"/>
+			<xsd:element name="State" type="xsd:string"/>
+			<xsd:element name="ResponseText" type="xsd:string"/>
+			<xsd:element name="ResponseCode" type="xsd:string"/>
+			<xsd:element name="Error" type="xsd:string"/>
+			<xsd:element name="ListOfErrors">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" ref="ns:Error"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ChannelId" type="xsd:string"/>
+			<xsd:element name="Token" type="xsd:string"/>
+			<xsd:element name="AccountType" type="xsd:string"/>
+			<xsd:element name="ProductCode" type="xsd:string"/>
+			<xsd:element name="CHDPrefix1" type="xsd:string"/>
+			<xsd:element name="CHDPrefix2" type="xsd:string"/>
+			<xsd:element name="CHDPrefix3" type="xsd:string"/>
+			<xsd:element name="CHDPrefix4" type="xsd:string"/>
+			<xsd:element name="PhoneNumber" type="xsd:string"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="enhancedAcctLkpRequest">
+		<wsdl:part element="tns:enhancedAcctLkpRequest" name="enhancedAcctLkpRequest"/>
+	</wsdl:message>
+	<wsdl:message name="enhancedAcctLkpResponse">
+		<wsdl:part element="tns:enhancedAcctLkpResponse" name="enhancedAcctLkpResponse"/>
+	</wsdl:message>
+	<wsdl:message name="findOpenToBuyRequest">
+		<wsdl:part element="tns:findOpenToBuyRequest" name="findOpenToBuyRequest"/>
+	</wsdl:message>
+	<wsdl:message name="findOpenToBuyResponse">
+		<wsdl:part element="tns:findOpenToBuyResponse" name="findOpenToBuyResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="AccountLookup">
+		<wsdl:operation name="enhancedAcctLkp">
+			<wsdl:input message="tns:enhancedAcctLkpRequest" name="enhancedAcctLkpRequest"/>
+			<wsdl:output message="tns:enhancedAcctLkpResponse" name="enhancedAcctLkpResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="findOpenToBuy">
+			<wsdl:input message="tns:findOpenToBuyRequest" name="findOpenToBuyRequest"/>
+			<wsdl:output message="tns:findOpenToBuyResponse" name="findOpenToBuyResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="AccountLookupSoap11" type="tns:AccountLookup">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="enhancedAcctLkp">
+			<soap:operation soapAction=""/>
+			<wsdl:input name="enhancedAcctLkpRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="enhancedAcctLkpResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOpenToBuy">
+			<soap:operation soapAction=""/>
+			<wsdl:input name="findOpenToBuyRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="findOpenToBuyResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="AccountLookupService">
+		<wsdl:port binding="tns:AccountLookupSoap11" name="AccountLookupSoap11">
+			<soap:address location="https://iwww.b2bcreditservices.com/AccountLookupService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

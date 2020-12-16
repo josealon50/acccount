@@ -1,0 +1,182 @@
+
+
+PROCESSING CUSTOMER: SOTOG227Z1
+string(670) "<soapenv:Body>
+  <v2:enhancedAcctLkpRequest>
+    <v2:EnhancedAcctReqParm>
+      <java:Client />
+      <java:MerchantNumber>5348123430000251</java:MerchantNumber>
+      <java:PartnerCode />
+      <java:Ssn />
+      <java:ZipCode>92571</java:ZipCode>
+      <java:ChannelId />
+      <java:ProductCode>QM</java:ProductCode>
+      <java:CHDPrefix1 />
+      <java:CHDPrefix2 />
+      <java:CHDPrefix3 />
+      <java:CHDPrefix4 />
+      <java:FirstName>GISSEL</java:FirstName>
+      <java:LastName>SOTO</java:LastName>
+      <java:AccountType />
+      <java:PhoneNumber>5623925698</java:PhoneNumber>
+    </v2:EnhancedAcctReqParm>
+  </v2:enhancedAcctLkpRequest>
+</soapenv:Body>
+"
+string(1926) "<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+  <env:Header />
+  <env:Body>
+    <V2:enhancedAcctLkpResponse xmlns:V2="http://schemas.syf.com/services/V2">
+      <V2:EnhancedAcctResParm>
+        <java:ResponseText xmlns:java="http://schemas.syf.com/service/account/java">SUCCESS</java:ResponseText>
+        <java:AccountNumber xmlns:java="http://schemas.syf.com/service/account/java">6019194600391525</java:AccountNumber>
+        <java:ExpirationMonth xmlns:java="http://schemas.syf.com/service/account/java">99</java:ExpirationMonth>
+        <java:ResponseCode xmlns:java="http://schemas.syf.com/service/account/java">000</java:ResponseCode>
+        <java:LastName xmlns:java="http://schemas.syf.com/service/account/java">SOTO</java:LastName>
+        <java:ZipCode xmlns:java="http://schemas.syf.com/service/account/java">92571-3530</java:ZipCode>
+        <java:City xmlns:java="http://schemas.syf.com/service/account/java">PERRIS</java:City>
+        <java:OpenToBuy xmlns:java="http://schemas.syf.com/service/account/java">0000000000003225</java:OpenToBuy>
+        <java:State xmlns:java="http://schemas.syf.com/service/account/java">CA</java:State>
+        <java:Address2 xmlns:java="http://schemas.syf.com/service/account/java" />
+        <java:Address1 xmlns:java="http://schemas.syf.com/service/account/java">1074 BUNTING WAY</java:Address1>
+        <java:CurrentBalance xmlns:java="http://schemas.syf.com/service/account/java">0000000000667.21</java:CurrentBalance>
+        <java:ExpirationYear xmlns:java="http://schemas.syf.com/service/account/java">99</java:ExpirationYear>
+        <java:FirstName xmlns:java="http://schemas.syf.com/service/account/java">GISSEL</java:FirstName>
+        <java:CreditLimit xmlns:java="http://schemas.syf.com/service/account/java">0000000000004000</java:CreditLimit>
+      </V2:EnhancedAcctResParm>
+    </V2:enhancedAcctLkpResponse>
+  </env:Body>
+</env:Envelope>
+"
+
+PROCESSING CUSTOMER: AYERE16150
+string(644) "<soapenv:Body>
+  <v2:enhancedAcctLkpRequest>
+    <v2:EnhancedAcctReqParm>
+      <java:Client />
+      <java:MerchantNumber>5348123430000079</java:MerchantNumber>
+      <java:PartnerCode />
+      <java:Ssn />
+      <java:ZipCode>99217</java:ZipCode>
+      <java:ChannelId />
+      <java:ProductCode>QM</java:ProductCode>
+      <java:CHDPrefix1 />
+      <java:CHDPrefix2 />
+      <java:CHDPrefix3 />
+      <java:CHDPrefix4 />
+      <java:FirstName>ELEANOR</java:FirstName>
+      <java:LastName>AYER</java:LastName>
+      <java:AccountType />
+      <java:PhoneNumber />
+    </v2:EnhancedAcctReqParm>
+  </v2:enhancedAcctLkpRequest>
+</soapenv:Body>
+"
+string(709) "<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+  <env:Header />
+  <env:Body>
+    <V2:enhancedAcctLkpResponse xmlns:V2="http://schemas.syf.com/services/V2">
+      <V2:EnhancedAcctResParm>
+        <java:ResponseCode xmlns:java="http://schemas.syf.com/service/account/java">400</java:ResponseCode>
+        <java:ResponseText xmlns:java="http://schemas.syf.com/service/account/java">Validation Error</java:ResponseText>
+        <java:ListOfErrors xmlns:java="http://schemas.syf.com/service/account/java">
+          <java:Error>The SSN field is required</java:Error>
+        </java:ListOfErrors>
+      </V2:EnhancedAcctResParm>
+    </V2:enhancedAcctLkpResponse>
+  </env:Body>
+</env:Envelope>
+"
+
+PROCESSING CUSTOMER: ASHLK11710
+
+PROCESSING CUSTOMER: WHITT12110
+string(675) "<soapenv:Body>
+  <v2:enhancedAcctLkpRequest>
+    <v2:EnhancedAcctReqParm>
+      <java:Client />
+      <java:MerchantNumber>5348123430000087</java:MerchantNumber>
+      <java:PartnerCode />
+      <java:Ssn />
+      <java:ZipCode>97030</java:ZipCode>
+      <java:ChannelId />
+      <java:ProductCode>QM</java:ProductCode>
+      <java:CHDPrefix1 />
+      <java:CHDPrefix2 />
+      <java:CHDPrefix3 />
+      <java:CHDPrefix4 />
+      <java:FirstName>TRAVIS</java:FirstName>
+      <java:LastName>WHITEHEAD</java:LastName>
+      <java:AccountType />
+      <java:PhoneNumber>6153002623</java:PhoneNumber>
+    </v2:EnhancedAcctReqParm>
+  </v2:enhancedAcctLkpRequest>
+</soapenv:Body>
+"
+string(668) "<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+  <env:Header />
+  <env:Body>
+    <V2:enhancedAcctLkpResponse xmlns:V2="http://schemas.syf.com/services/V2">
+      <V2:EnhancedAcctResParm>
+        <java:ResponseCode xmlns:java="http://schemas.syf.com/service/account/java">101</java:ResponseCode>
+        <java:ResponseText xmlns:java="http://schemas.syf.com/service/account/java">Account Activation Required</java:ResponseText>
+        <java:AccountNumber xmlns:java="http://schemas.syf.com/service/account/java">6019194600368473</java:AccountNumber>
+      </V2:EnhancedAcctResParm>
+    </V2:enhancedAcctLkpResponse>
+  </env:Body>
+</env:Envelope>
+"
+
+PROCESSING CUSTOMER: MABIH17220
+string(672) "<soapenv:Body>
+  <v2:enhancedAcctLkpRequest>
+    <v2:EnhancedAcctReqParm>
+      <java:Client />
+      <java:MerchantNumber>5348123430000087</java:MerchantNumber>
+      <java:PartnerCode />
+      <java:Ssn />
+      <java:ZipCode>97233</java:ZipCode>
+      <java:ChannelId />
+      <java:ProductCode>QM</java:ProductCode>
+      <java:CHDPrefix1 />
+      <java:CHDPrefix2 />
+      <java:CHDPrefix3 />
+      <java:CHDPrefix4 />
+      <java:FirstName>HAYDEE</java:FirstName>
+      <java:LastName>MABINI</java:LastName>
+      <java:AccountType />
+      <java:PhoneNumber>6267036225</java:PhoneNumber>
+    </v2:EnhancedAcctReqParm>
+  </v2:enhancedAcctLkpRequest>
+</soapenv:Body>
+"
+string(1930) "<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+  <env:Header />
+  <env:Body>
+    <V2:enhancedAcctLkpResponse xmlns:V2="http://schemas.syf.com/services/V2">
+      <V2:EnhancedAcctResParm>
+        <java:ResponseText xmlns:java="http://schemas.syf.com/service/account/java">SUCCESS</java:ResponseText>
+        <java:AccountNumber xmlns:java="http://schemas.syf.com/service/account/java">6019194600402264</java:AccountNumber>
+        <java:ExpirationMonth xmlns:java="http://schemas.syf.com/service/account/java">99</java:ExpirationMonth>
+        <java:ResponseCode xmlns:java="http://schemas.syf.com/service/account/java">000</java:ResponseCode>
+        <java:LastName xmlns:java="http://schemas.syf.com/service/account/java">MABINI</java:LastName>
+        <java:ZipCode xmlns:java="http://schemas.syf.com/service/account/java">97233-4522</java:ZipCode>
+        <java:City xmlns:java="http://schemas.syf.com/service/account/java">PORTLAND</java:City>
+        <java:OpenToBuy xmlns:java="http://schemas.syf.com/service/account/java">0000000000000001</java:OpenToBuy>
+        <java:State xmlns:java="http://schemas.syf.com/service/account/java">OR</java:State>
+        <java:Address2 xmlns:java="http://schemas.syf.com/service/account/java" />
+        <java:Address1 xmlns:java="http://schemas.syf.com/service/account/java">17223 SE PINE ST</java:Address1>
+        <java:CurrentBalance xmlns:java="http://schemas.syf.com/service/account/java">0000000000000.00</java:CurrentBalance>
+        <java:ExpirationYear xmlns:java="http://schemas.syf.com/service/account/java">99</java:ExpirationYear>
+        <java:FirstName xmlns:java="http://schemas.syf.com/service/account/java">HAYDEE</java:FirstName>
+        <java:CreditLimit xmlns:java="http://schemas.syf.com/service/account/java">0000000000002500</java:CreditLimit>
+      </V2:EnhancedAcctResParm>
+    </V2:enhancedAcctLkpResponse>
+  </env:Body>
+</env:Envelope>
+"
+
+PROCESSING CUSTOMER: TALTD22621
+
+PROCESSING CUSTOMER: HICKM508Z5
+
