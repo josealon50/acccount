@@ -125,13 +125,11 @@
                     
                     if ( $merchant->next() ){
                         $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE(), $cust->get_ZIP_CD() );
-                        var_dump($acct->AccountNumber);
                         sleep($appconfig['CALL_DELAY']); 
                         if( !isset($acct->AccountNumber) ){
                             //Might need to do a search on bus phone 
                             if( !is_null($cust->get_BUS_PHONE()) ){
                                 $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_BUS_PHONE(), $cust->get_ZIP_CD() );
-                                var_dump($acct->AccountNumber);
                                 sleep($appconfig['CALL_DELAY']); 
                                 if( !isset($acct->AccountNumber) ){
                                     //Capture customer we could not find his account number 
