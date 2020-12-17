@@ -250,11 +250,9 @@
             $limit = 0;
             if ( isset($accts->CreditLimit) ){
                 $limit  = ltrim($accts->CreditLimit, '0');
-                var_dump($limit);
             }
 
             $payload = json_encode( array( "CUST_CD"=> $custCd, "ACCT_NUM" => $accts->AccountNumber, "AS_CD" => "SYF", "APP_CREDIT_LINE" => $limit ));
-            var_dump($payload);
 
             curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
             curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
