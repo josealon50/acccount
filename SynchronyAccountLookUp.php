@@ -16,8 +16,8 @@
     include_once("./libs/src/Synchrony/SynchronyHeader.php");
     include_once( './libs/AcctLookUp/EnhancedAcctReqParm.php');
     include_once( './libs/AcctLookUp/enhancedAcctLkpRequest.php');
-    //require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
-    require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
+    require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
+    //require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
 
     global $appconfig;
     
