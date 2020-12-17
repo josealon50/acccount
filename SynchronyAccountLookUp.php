@@ -15,8 +15,8 @@
     include_once("./libs/src/Synchrony/SynchronyHeader.php");
     include_once( './libs/AcctLookUp/EnhancedAcctReqParm.php');
     include_once( './libs/AcctLookUp/enhancedAcctLkpRequest.php');
-    require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
-    //require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
+    //require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
+    require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
 
     global $appconfig;
     
@@ -38,7 +38,8 @@
     }
     else{
         $customers = new CustAsp( $db );
-        $where = "WHERE AS_CD = 'SYF' AND ACCT_NUM IS NULL"; 
+        //$where = "WHERE AS_CD = 'SYF' AND ACCT_NUM IS NULL"; 
+        $where = "WHERE CUST_CD = 'RODRC32222'"; 
     }
 
     $error = $customers->query($where);
@@ -245,14 +246,23 @@
 
         try{ 
             $ch = curl_init( $appconfig['CREATE_CUST_ASP_ENDPOINT'] );
-            $payload = json_encode( array( "CUST_CD"=> $custCd, "ACCT_NUM" => $accts->AccountNumber, "AS_CD" => "SYF", "APP_CREDIT_LINE" => 0 ) );
+
+            $limit = 0;
+            if ( isset($accts->CreditLimit) ){
+                $limit  = ltrim($accts->CreditLimit, '0');
+                var_dump($limit);
+            }
+
+            $payload = json_encode( array( "CUST_CD"=> $custCd, "ACCT_NUM" => $accts->AccountNumber, "AS_CD" => "SYF", "APP_CREDIT_LINE" => $limit ));
             var_dump($payload);
 
             curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
             curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-
+            
+            curl_exec($ch);
             curl_close($ch);
+
             return true;
         }
         catch( Exception $e ){
