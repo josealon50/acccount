@@ -37,9 +37,9 @@
         $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.SO_STORE_CD = '" . $argv[3] . "' ";
         
     }
-    else if( $argc == 2 ){
+    else if( $argv[1] == 2 ){
         $customers = new ASPStoreForward($db);
-        $where = "WHERE  as_cd = 'SYF' AND store_cd IN ( " . $appconfig['PROCESS_STORE_CD'] . ") AND stat_cd = 'H' AND trunc(create_dt_time) between '" . $appconfig['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['PROCESS_TO_DATE'] . "' ";
+        $where = "WHERE  as_cd = 'SYF' AND store_cd IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND stat_cd = 'H' AND trunc(create_dt_time) between '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' ";
     }
     else{
         $customers = new CustAsp( $db );
