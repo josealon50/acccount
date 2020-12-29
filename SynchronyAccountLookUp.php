@@ -16,8 +16,8 @@
     include_once("./libs/src/Synchrony/SynchronyHeader.php");
     include_once( './libs/AcctLookUp/EnhancedAcctReqParm.php');
     include_once( './libs/AcctLookUp/enhancedAcctLkpRequest.php');
-    require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
-    //require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
+    //require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
+    require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
 
     global $appconfig;
     
@@ -37,9 +37,9 @@
         $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.SO_STORE_CD = '" . $argv[3] . "' ";
         
     }
-    else if( $argv[1] == 2 ){
+    else if( $argc == 2 ){
         $customers = new ASPStoreForward($db);
-        $where = "WHERE  as_cd = 'SYF' AND store_cd = '" . $argv[2] . "' AND stat_cd = 'H' AND trunc(create_dt_time) = TRUNC(SYSDATE-1)";
+        $where = "WHERE  as_cd = 'SYF' AND store_cd IN ( " . $appconfig['PROCESS_STORE_CD'] . ") AND stat_cd = 'H' AND trunc(create_dt_time) between '" . $appconfig['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['PROCESS_TO_DATE'] . "' ";
     }
     else{
         $customers = new CustAsp( $db );
@@ -88,6 +88,7 @@
 
                if( $merchant->next() ){
                     $acct = getAccountNumber( $merchant->get_MERCHANT_NUM(), $cust->get_FNAME(), $cust->get_LNAME(), $cust->get_HOME_PHONE(), $cust->get_ZIP_CD() );
+
                     sleep($appconfig['CALL_DELAY']); 
                     if( !isset($acct->AccountNumber) ){
                         //Might need to do a search on bus phone 
@@ -101,7 +102,7 @@
                             }
                             else{
                                 //Call endpoint to create new CUST_ASP record
-                                callCustAsp( $row['CUST_CD'], $acct );
+                                callCustAsp( $db, $row['CUST_CD'], $acct );
                             }
                         }
                         else{
@@ -110,7 +111,7 @@
                     }
                     else{
                         //Call endpoint to create new CUST_ASP record
-                        callCustAsp( $row['CUST_CD'], $acct );
+                        callCustAsp( $db, $row['CUST_CD'], $acct );
                     }
                }
             }
@@ -143,7 +144,7 @@
                                 }
                                 else{
                                     //Call endpoint to create new CUST_ASP record
-                                    callCustAsp( $row['CUST_CD'], $acct );
+                                    callCustAsp( $db, $row['CUST_CD'], $acct );
                                 }
                             }
                             else{
@@ -152,7 +153,7 @@
                         }
                         else{
                             //Call endpoint to create new CUST_ASP record
-                            callCustAsp( $row['CUST_CD'], $acct );
+                            callCustAsp( $db, $row['CUST_CD'], $acct );
                         }
                     }
                     else{
@@ -246,33 +247,59 @@
         return null;
 
     }
-    function callCustAsp( $custCd, $accts ){
+    function callCustAsp( $db, $custCd, $accts ){
         global $appconfig;
 
-        try{ 
-            $ch = curl_init( $appconfig['CREATE_CUST_ASP_ENDPOINT'] );
+        $encAcctNum = openssl_encrypt($accts->AccountNumber, $appconfig['ciphering'], $appconfig['encryption_key'], $appconfig['options'], $appconfig['encryption_iv']);
 
-            $limit = 0;
-            if ( isset($accts->CreditLimit) ){
-                $limit  = ltrim($accts->CreditLimit, '0');
-            }
-
-            $payload = json_encode( array( "CUST_CD"=> $custCd, "ACCT_NUM" => $accts->AccountNumber, "AS_CD" => "SYF", "APP_CREDIT_LINE" => $limit ));
-
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
-            curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        //Check if a record already exists for that customer
+        $custAsp = new CustAsp( $db );
+        $existingCustAsp = $custAsp->getCustAspByAcctNumAndAsCdAndCustCdAndAcctCd( $custCd, "SYF", substr( $accts->AccountNumber, -4 ), $encAcctNum, '' );
+        if( !is_null($existingCustAsp) ){
+            return;
             
-            curl_exec($ch);
-            curl_close($ch);
+        }
 
-            return true;
+        //Check if a record exists for that customer  
+        $existingCustAsp = $custAsp->getCustAspByCustCdAndAsCd( $custCd, 'SYF', '' );
+        if( is_null($existingCustAsp) ){
+            createCustAsp ($db, $custCd, 'SYF', $accts->AccountNumber, $accts->CreditLimit, '', $encAcctNum);
+            return;
         }
-        catch( Exception $e ){
-            return false;
+        else{
+            $where = array( "CUST_CD" => $custCd, "AS_CD" => 'SYF' );
+            $updt = array( "ACCT_NUM" => $encAcctNum, "ACCT_CD" => substr( $accts->AccountNumber, -4 ) ); 
+            $update = $custAsp->updateCustAsp( $where, $updt );
         }
+
         
     }
+
+	function createCustAsp ($db, $cust_cd, $finco, $acctnum, $crlimit, $as_ref_no, $encAcctNum = '') {
+		global $appconfig;		
+		$custAsp = new CustAsp($db);
+
+		$custAsp->set_CUST_CD(strtoupper($cust_cd));
+		$custAsp->set_AS_CD($finco);
+		$custAsp->set_APP_CREDIT_LINE($crlimit);
+		$custAsp->set_APP_REF_NUM($as_ref_no);
+        if ( $finco == 'SYF' ){
+		    $custAsp->set_ACCT_CD(substr($acctnum, -4));
+		    $custAsp->set_ACCT_NUM($encAcctNum);
+
+        }
+        else{
+		    $custAsp->set_ACCT_CD(substr($acctnum, -10));
+
+        }
+		$result = $custAsp->insert(false, false);	
+
+		if ($result == false) {
+            return false;
+		}
+
+        return true;
+	}
 
 
     function sessionConnect() {
