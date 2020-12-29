@@ -256,6 +256,9 @@
         $custAsp = new CustAsp( $db );
         $existingCustAsp = $custAsp->getCustAspByAcctNumAndAsCdAndCustCdAndAcctCd( $custCd, "SYF", substr( $accts->AccountNumber, -4 ), $encAcctNum, '' );
         if( !is_null($existingCustAsp) ){
+            echo "Customer: " . $custCd . " already exists \n";
+            echo "Encrypted Account Number: " . $encAcctNum . "\n";
+            echo "Credit Limit: " . $accts->CreditLimit . "\n";
             return;
             
         }
@@ -263,12 +266,20 @@
         //Check if a record exists for that customer  
         $existingCustAsp = $custAsp->getCustAspByCustCdAndAsCd( $custCd, 'SYF', '' );
         if( is_null($existingCustAsp) ){
+            echo "Creating Customer: " . $custCd . "\n";
+            echo "Encrypted Account Number: " . $encAcctNum . "\n";
+            echo "Credit Limit: " . $accts->CreditLimit . "\n";
+
             createCustAsp ($db, $custCd, 'SYF', $accts->AccountNumber, $accts->CreditLimit, '', $encAcctNum);
             return;
         }
         else{
             $where = array( "CUST_CD" => $custCd, "AS_CD" => 'SYF' );
-            $updt = array( "ACCT_NUM" => $encAcctNum, "ACCT_CD" => substr( $accts->AccountNumber, -4 ) ); 
+            $updt = array( "ACCT_NUM" => $encAcctNum, "ACCT_CD" => substr( $accts->AccountNumber, -4 ), "APP_CREDIT_LINE" => $accts->CreditLimit ); 
+
+            echo "Updating customer: " . $custCd . "\n";
+            var_dump($updt);
+
             $update = $custAsp->updateCustAsp( $where, $updt );
         }
 
