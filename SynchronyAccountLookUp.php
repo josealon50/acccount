@@ -1,23 +1,8 @@
 <?php
-    include_once( './config.php' );
-    include_once( './libs/IDBResource.php');
-    include_once( './libs/IDBTable.php');
-    include_once( './libs/IDate.php');
-    include_once( './db/CustAsp.php');
-    include_once( './db/Cust.php');
-    include_once( './db/MorCustAspAppHist.php');
-    include_once( './db/MorStoreToAspMerchant.php');
-    include_once( './db/ZipCodes.php');
-    include_once( './db/CustAspAndSo.php');
-    include_once( './db/ASPStoreForward.php');
-    include_once("./libs/src/Synchrony/SynchronySoap.php");
-    include_once("./libs/src/Synchrony/SynchronyBody.php");
-    include_once("./libs/src/Synchrony/SynchronyRequest.php");
-    include_once("./libs/src/Synchrony/SynchronyHeader.php");
-    include_once( './libs/AcctLookUp/EnhancedAcctReqParm.php');
-    include_once( './libs/AcctLookUp/enhancedAcctLkpRequest.php');
-    require_once("/home/public_html/weblibs/iware/php/utils/IAutoLoad.php");
-    //require_once("../../public/libs".DIRECTORY_SEPARATOR."iware".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."utils".DIRECTORY_SEPARATOR."IAutoLoad.php");
+    include_once( './../config.php' );
+    include_once( './autoload.php' );
+
+    spl_autoload_register('SynchronyAutoload');
 
     global $appconfig;
     
@@ -26,25 +11,26 @@
     $customersNoAcct = []; 
     $row = null;
 
-    if ( $argc == 4 ){
-        $customers = new CustAspAndSo( $db );
-        $fromDate = new IDate();
-        $fromDate->setDate( $argv[1], IDate::ORACLE_FORMAT );
-        $endDate = new IDate();
-        $endDate->setDate( $argv[2], IDate::ORACLE_FORMAT );
+    if ( count($argv) > 1 ){
+        if ( $argv[1] == 1 ){
+            $customers = new CustAspAndSo( $db );
+            $fromDate = new IDate();
+            $fromDate->setDate( $argv[2], IDate::ORACLE_FORMAT );
+            $endDate = new IDate();
+            $endDate->setDate( $argv[3], IDate::ORACLE_FORMAT );
 
-        //Doing a search by date on SO.PU_DEL_DT
-        $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.SO_STORE_CD = '" . $argv[3] . "' ";
-        
-    }
-    else if( $argv[1] == 2 ){
-        $customers = new ASPStoreForward($db);
-        $where = "WHERE  as_cd = 'SYF' AND store_cd IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND stat_cd = 'H' AND trunc(create_dt_time) between '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' ";
+            //Doing a search by date on SO.PU_DEL_DT
+            $where = "WHERE TO_DATE(SO.PU_DEL_DT) >= TO_DATE( '" . $fromDate->toStringOracle() . "', 'dd-mm-yy') AND TO_DATE(SO.PU_DEL_DT) <= TO_DATE( '" . $endDate->toStringOracle() . "', 'dd-mm-yy') AND ACCT_NUM IS NULL AND AS_CD='SYF' AND SO.SO_STORE_CD IN (" . $appconfig['synchrony']['PROCESS_STORE_CD'] . " ) ";
+            
+        }
+        else if( $argv[1] == 2 ){
+            $customers = new ASPStoreForward($db);
+            $where = "WHERE  as_cd = 'SYF' AND store_cd IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND stat_cd = 'H' AND trunc(create_dt_time) between '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' ";
+        }
     }
     else{
         $customers = new CustAsp( $db );
-        //$where = "WHERE AS_CD = 'SYF' AND ACCT_NUM IS NULL"; 
-        $where = "WHERE CUST_CD = 'RODRC32222'"; 
+        $where = "WHERE CUST_CD IN (" . $appconfig['synchrony']['PROCESS_CUST_CDS'] . " ) " ; 
     }
 
     $error = $customers->query($where);
@@ -55,6 +41,8 @@
 
     while( $row = $customers->next() ){
         echo "PROCESSING CUSTOMER: " . $row['CUST_CD'] . "\n";
+            
+
         //Query Cust table to get phone number
         $cust = new Cust($db);
         $where = "WHERE CUST_CD = '" . $row['CUST_CD'] . "' ";
@@ -62,11 +50,23 @@
 
         if( $count < 0 ){
             //Customer has no CUST record save him to an error array
-            array_push( $error, [ $row['CUST_CD'], 'No Customer record' ] );
+            array_push( $customersNoAcct, [ $row['CUST_CD'], '', '', '', 'No Customer record' ] );
             continue;
         }
+
         
-        if( $cust->next() ){
+        if( $customer = $cust->next() ){
+            echo "VALIDATING DATA FOR CUSTOMER: " . $row['CUST_CD'] . "\n";
+            $valid = validateCustomer( $customer );
+            
+            var_dump( " CUSTOMER VALID: " . $valid );
+            if ( !$valid ){
+                array_push( $customersNoAcct, [ $customer['CUST_CD'], $customer['FNAME'], $customer['LNAME'], $customer['HOME_PHONE'], 'Invalid Customer Info' ] );
+                continue;
+                
+            }
+
+
             //We need to find out where the customer applied for credit if there is no record
             //we might need to use the zip code to find the closest store
             //should be in table MOR_CUST_ASP_HISTORY 
@@ -252,6 +252,13 @@
 
         $encAcctNum = openssl_encrypt($accts->AccountNumber, $appconfig['ciphering'], $appconfig['encryption_key'], $appconfig['options'], $appconfig['encryption_iv']);
 
+        if ( !isset($accts->CreditLimit) ){
+            $accts->CreditLimit = 0;
+        }
+        else{
+            $accts->CreditLimit = ltrim($accts->CreditLimit, '0');
+        }
+
         //Check if a record already exists for that customer
         $custAsp = new CustAsp( $db );
         $existingCustAsp = $custAsp->getCustAspByAcctNumAndAsCdAndCustCdAndAcctCd( $custCd, "SYF", substr( $accts->AccountNumber, -4 ), $encAcctNum, '' );
@@ -269,7 +276,7 @@
             echo "Creating Customer: " . $custCd . "\n";
             echo "Encrypted Account Number: " . $encAcctNum . "\n";
             echo "Credit Limit: " . $accts->CreditLimit . "\n";
-
+            
             createCustAsp ($db, $custCd, 'SYF', $accts->AccountNumber, $accts->CreditLimit, '', $encAcctNum);
             return;
         }
@@ -327,5 +334,19 @@
 
         return $db;
 
+    }
+
+    function validateCustomer( $row ){
+        //Check if firstname has some special characters 
+        if ( preg_match('/[^£$%&*()}{@#~?><>,|=_+¬-]/', $row['FNAME'] )){
+            return false;
+        }
+
+        if ( preg_match('/[^£$%&*()}{@#~?><>,|=_+¬-]/', $row['LNAME'] )){
+            return false;
+        }
+
+        return true;
+        
     }
 ?>
