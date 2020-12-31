@@ -2,7 +2,6 @@
     include_once( './../../config.php' );
     include_once( './autoload.php' );
 
-    spl_autoload_register('SynchronyAutoload');
 
     global $appconfig;
     
@@ -24,8 +23,8 @@
             
         }
         else if( $argv[1] == 2 ){
-            $customers = new ASPStoreForward($db);
-            $where = "WHERE  as_cd = 'SYF' AND store_cd IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND stat_cd = 'H' AND trunc(create_dt_time) between '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' ";
+            $customers = new AsfmAndCustAsp($db);
+            $where = "WHERE  ASP_STORE_FORWARD.AS_CD = 'SYF' AND STORE_CD IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND STAT_CD = 'H' AND TRUNC(CREATE_DT_TIME) BETWEEN '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' AND ACCT_NUM IS NULL ";
         }
     }
     else{
@@ -338,14 +337,15 @@
 
     function validateCustomer( $row ){
         //Check if firstname has some special characters 
-        if ( preg_match('/[^£$%&*()}{@#~?><>,|=_+¬-]/', $row['FNAME'] )){
+        if ( strpos( $row['FNAME'], '/' ) > 0 ){
             return false;
         }
-
-        if ( preg_match('/[^£$%&*()}{@#~?><>,|=_+¬-]/', $row['LNAME'] )){
+        if ( strpos( $row['FNAME'], '&' ) > 0 ){
             return false;
         }
-
+        if ( strpos( $row['FNAME'], '\\' ) > 0 ){
+            return false;
+        }
         return true;
         
     }
