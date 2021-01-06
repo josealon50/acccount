@@ -24,14 +24,22 @@
         }
         else if( $argv[1] == 2 ){
             $customers = new AsfmAndCustAsp($db);
-            $where = "WHERE  ASP_STORE_FORWARD.AS_CD = 'SYF' AND STORE_CD IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND STAT_CD = 'H' AND TRUNC(CREATE_DT_TIME) BETWEEN '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' AND ACCT_NUM IS NULL ";
+            if ( $appconfig['synchrony']['PROCESS_STORE_CD'] !== '' && $appconfig['synchrony']['PROCESS_FROM_DATE'] !== '' && $appconfig['synchrony']['PROCESS_TO_DATE'] !== '' ){
+                $where = "WHERE  ASP_STORE_FORWARD.AS_CD = 'SYF' AND STORE_CD IN ( " . $appconfig['synchrony']['PROCESS_STORE_CD'] . ") AND STAT_CD = 'H' AND TRUNC(CREATE_DT_TIME) BETWEEN '" . $appconfig['synchrony']['PROCESS_FROM_DATE'] . "' AND '" . $appconfig['synchrony']['PROCESS_TO_DATE'] . "' AND ACCT_NUM IS NULL ";
+            }
+            else{
+                $processedDates = getSettlementDates();
+                $where .= "AND TRUNC(CREATE_DT_TIME) BETWEEN '" . $processedDates['FROM_DATE'] . "' AND '" . $processedDates['TO_DATE'] . "' ";
+
+            }
         }
     }
     else{
         $customers = new CustAsp( $db );
         $where = "WHERE CUST_CD IN (" . $appconfig['synchrony']['PROCESS_CUST_CDS'] . " ) " ; 
     }
-
+    
+    var_dump($where);
     $error = $customers->query($where);
     if ( $error < 0 ){
         //echo "Error on Query to CUST_ASP: " . $where . "\n";
@@ -348,5 +356,38 @@
         }
         return true;
         
+    }
+
+    function getSettlementDates(){
+        global $appconfig;
+        
+        $dates = [];
+
+        $fromDate = new IDate();
+        $toDate = new IDate();
+
+        //Check if today is Monday 
+        if ( date('D') == 'Mon' ){
+            $twoDays = date("Y-m-d", strtotime("-2 day"));      
+            $fromDate->setDate( $twoDays );
+
+            $oneDay = date("Y-m-d", strtotime("-1 day"));      
+            $toDate->setDate( $oneDay );
+
+            $dates['FROM_DATE'] = $fromDate->toStringOracle();
+            $dates['TO_DATE'] = $toDate->toStringOracle();
+
+            return $dates;
+            
+        }
+
+        $oneDay = date("Y-m-d", strtotime("-1 day"));      
+        $fromDate->setDate( $oneDay );
+        $toDate->setDate( $oneDay );
+
+        $dates['FROM_DATE'] = $fromDate->toStringOracle();
+        $dates['TO_DATE'] = $toDate->toStringOracle();
+
+        return $dates;
     }
 ?>
