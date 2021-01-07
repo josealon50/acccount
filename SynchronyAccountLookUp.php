@@ -29,7 +29,7 @@
             }
             else{
                 $processedDates = getSettlementDates();
-                $where .= "AND TRUNC(CREATE_DT_TIME) BETWEEN '" . $processedDates['FROM_DATE'] . "' AND '" . $processedDates['TO_DATE'] . "' ";
+                $where .= " WHERE  ASP_STORE_FORWARD.AS_CD = 'SYF' AND STAT_CD = 'H' AND ACCT_NUM IS NULL AND TRUNC(CREATE_DT_TIME) BETWEEN '" . $processedDates['FROM_DATE'] . "' AND '" . $processedDates['TO_DATE'] . "' ";
 
             }
         }
